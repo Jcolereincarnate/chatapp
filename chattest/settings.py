@@ -27,7 +27,11 @@ SECRET_KEY = 'django-insecure-053xs9p@8nu+sm*5t-(xu@trgo32wb*8&w-p6bh)s+fhqemp51
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "chatapp-glgj.onrender.com", 
+]
 
 
 # Application definition
