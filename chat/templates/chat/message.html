@@ -1,0 +1,160 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <link rel="stylesheet" href="{% static 'chat/style.css' %}">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="room-info">
+                {% if room_name %}
+                    <h2 class="room-title">{{ room_name}}</h2>
+                {% else %}
+                    <h2 class="room-title">General Chat</h2>
+                {% endif %}
+                <p>{{ username }}</p>
+            </div>
+            <div class="online-status">
+                <div class="status-dot"></div>
+                <span id="online-text">Offline</span>
+            </div>
+        </div>
+        
+        <div id="messages">
+            {% for i in messages %}
+                {% if i.sender != username %}   
+                    <div class="message">
+                        <div class="message-bubble">
+                            <div class="message-content">{{ i.message }}</div>
+                        </div>
+                        <div class="message-info">
+                            <span class="username">{{i.sender}}</span>
+                            <span class="timestamp">{{i.timesent}}</span>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="message own">
+                        <div class="message-bubble">
+                            <div class="message-content">{{ i.message }}</div>
+                        </div>
+                        <div class="message-info">
+                            <span class="timestamp">{{i.timesent}}</span>
+                            <span class="username">You</span>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        
+        <div class="input-area">
+            <textarea 
+                class="message-input" 
+                id="message-input" 
+                placeholder="Type your message here..." 
+                rows="1"
+            ></textarea>
+            <button class="send-button" id="send-button" type="button"></button>
+        </div>
+    </div>
+
+    <script>
+        const websocketProtocol = window.location.protocol === "https:" ? "wss" : "ws";
+        const endpoint = `${websocketProtocol}://${window.location.host}/ws/chat/{{ room_name }}/`;
+        const socket = new WebSocket(endpoint);
+        const statusDot = document.querySelector('.status-dot');
+        const onlineText = document.getElementById('online-text');
+        
+        socket.onopen = (e) => {
+            statusDot.style.backgroundColor = 'green';
+            onlineText.textContent = 'Online';
+            console.log("WebSocket connection established.");
+        };
+        
+        socket.onclose = (e) => {
+            statusDot.style.backgroundColor = 'gray';
+            onlineText.textContent = 'Offline';
+            console.log("WebSocket connection closed.");
+        };
+
+        // Auto-resize textarea
+        const messageInput = document.getElementById("message-input");
+        messageInput.addEventListener("input", function () {
+            this.style.height = "auto";
+            this.style.height = Math.min(this.scrollHeight, 120) + "px";
+        });
+        
+        // Send button functionality
+        document.getElementById("send-button").addEventListener("click", (event) => {
+            event.preventDefault();
+        
+            const inputField = document.getElementById("message-input");
+            const message = inputField.value.trim();
+        
+            if (message) {
+                socket.send(JSON.stringify({
+                    message: message,
+                    sender: "{{ username }}",
+                    room: "{{ room_name }}"
+                }));
+        
+                inputField.value = "";
+                inputField.style.height = "auto";
+            }
+        });
+        
+        // Send message on Enter key (but allow Shift+Enter for new lines)
+        messageInput.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                document.getElementById("send-button").click();
+            }
+        });
+        
+        socket.addEventListener("message", (event) => {
+            const messageData = JSON.parse(event.data);
+            const sender = messageData["sender"];
+            const message = messageData["message"];
+            const isOwn = sender === "{{ username }}";
+            addMessageToChat(message, isOwn, sender);
+        });
+        
+        function addMessageToChat(message, isOwn = false, sender) {
+            const messagesArea = document.getElementById("messages");
+            const messageDiv = document.createElement("div");
+            messageDiv.className = `message ${isOwn ? "own" : ""}`;
+        
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], { 
+                hour: "2-digit", 
+                minute: "2-digit" 
+            });
+        
+            messageDiv.innerHTML = `
+                <div class="message-bubble">
+                    <div class="message-content">${message}</div>
+                </div>
+                <div class="message-info">
+                    ${isOwn ? 
+                        `<span class="timestamp">${timeString}</span><span class="username">You</span>` : 
+                        `<span class="username">${sender}</span><span class="timestamp">${timeString}</span>`
+                    }
+                </div>
+            `;
+        
+            messagesArea.appendChild(messageDiv);
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+        }
+
+        // Scroll to bottom on page load
+        window.addEventListener('load', () => {
+            const messagesArea = document.getElementById("messages");
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+        });
+    </script>
+</body>
+</html>

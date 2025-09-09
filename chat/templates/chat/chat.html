@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Room - Chat App</title>
+    <link rel="stylesheet" href="{% static 'chat/index.css' %}">
+</head>
+<body>
+    <div class="decorative-elements">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>Join Chat</h1>
+            <p>Enter your details to start chatting</p>
+        </div>
+        
+        <form id="form" method="POST">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required />
+            </div>
+            
+            <div class="form-group">
+                <label for="roomname">Room Name:</label>
+                <input type="text" id="roomname" name="roomname" placeholder="Enter room name" required />
+            </div>
+            
+            <button type="submit">Join Room</button>
+        </form>
+    </div>
+</body>
+</html>

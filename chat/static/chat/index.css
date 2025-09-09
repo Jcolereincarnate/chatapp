@@ -1,0 +1,200 @@
+/* Complete redesign to match Instagram's clean aesthetic */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #fafafa;
+    /* Instagram's light gray background */
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container {
+    background: #ffffff;
+    /* Clean white background */
+    border: 1px solid #dbdbdb;
+    /* Instagram's border color */
+    border-radius: 1px;
+    /* Instagram's minimal border radius */
+    padding: 40px 40px 44px;
+    /* Instagram's exact padding */
+    box-shadow: none;
+    /* No shadow like Instagram */
+    width: 100%;
+    max-width: 350px;
+    /* Instagram's form width */
+    transform: none;
+    /* No transform effects */
+    transition: none;
+}
+
+.container:hover {
+    transform: none;
+    /* No hover effects */
+    box-shadow: none;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 36px;
+    /* Instagram's spacing */
+}
+
+.header h1 {
+    color: #262626;
+    /* Instagram's text color */
+    font-size: 24px;
+    /* Smaller, cleaner font size */
+    font-weight: 600;
+    /* Instagram's font weight */
+    margin-bottom: 12px;
+    background: none;
+    /* No gradient text */
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: unset;
+    background-clip: unset;
+    font-family: inherit;
+}
+
+.header p {
+    color: #8e8e8e;
+    /* Instagram's muted text color */
+    font-size: 14px;
+    /* Smaller subtitle */
+    font-weight: 400;
+    line-height: 18px;
+}
+
+.form-group {
+    margin-bottom: 6px;
+    /* Tight spacing like Instagram */
+}
+
+label {
+    display: none;
+    /* Hide labels like Instagram forms */
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 9px 0 7px 8px;
+    /* Instagram's exact input padding */
+    border: 1px solid #dbdbdb;
+    /* Instagram's border */
+    border-radius: 3px;
+    /* Instagram's border radius */
+    font-size: 12px;
+    /* Instagram's input font size */
+    background: #fafafa;
+    /* Instagram's input background */
+    transition: border-color 0.2s ease;
+    outline: none;
+    color: #262626;
+    margin-bottom: 6px;
+    /* Instagram's spacing */
+}
+
+input[type="text"]:focus {
+    border-color: #a8a8a8;
+    /* Instagram's focus border color */
+    background: #ffffff;
+    box-shadow: none;
+    /* No shadow */
+    transform: none;
+    /* No transform */
+}
+
+input[type="text"]:hover {
+    border-color: #a8a8a8;
+    background: #ffffff;
+}
+
+input[type="text"]::placeholder {
+    color: #8e8e8e;
+    /* Instagram's placeholder color */
+    font-style: normal;
+    /* No italic */
+    font-size: 12px;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 5px 9px;
+    /* Instagram's button padding */
+    background: #0095f6;
+    /* Instagram's blue */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    /* Instagram's button radius */
+    font-size: 14px;
+    /* Instagram's button font size */
+    font-weight: 600;
+    /* Instagram's font weight */
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-transform: none;
+    /* No uppercase */
+    letter-spacing: normal;
+    /* Normal letter spacing */
+    margin-top: 8px;
+    /* Instagram's spacing */
+    font-family: inherit;
+}
+
+button[type="submit"]:hover {
+    transform: none;
+    /* No transform */
+    box-shadow: none;
+    /* No shadow */
+    background: #1877f2;
+    /* Darker blue on hover */
+}
+
+button[type="submit"]:active {
+    transform: none;
+    /* No transform */
+    background: #166fe5;
+    /* Even darker on active */
+}
+
+
+/* Remove all decorative elements */
+
+.decorative-elements,
+.circle {
+    display: none;
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 40px 40px 44px;
+        /* Keep same padding on mobile */
+        margin: 0;
+        border: none;
+        /* No border on mobile */
+        width: 100%;
+        max-width: none;
+    }
+    .header h1 {
+        font-size: 24px;
+        /* Keep same size */
+    }
+    input[type="text"] {
+        padding: 9px 0 7px 8px;
+        /* Keep same padding */
+    }
+    button[type="submit"] {
+        padding: 5px 9px;
+        /* Keep same padding */
+        font-size: 14px;
+    }
+}
