@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import urllib.parse as urlparse
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -42,9 +44,21 @@ INSTALLED_APPS = [
 ]
 
 ASGI_APPLICATION = 'chattest.asgi.application'
-CHANNEL_LAYERS = {
-    'default': {'BACKEND': 'channels.layers.InMemoryChannelLayer'}
-}
+REDIS_URL = os.environ.get("REDIS_URL")
+if REDIS_URL:
+    url = urlparse.urlparse(REDIS_URL)
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [(url.hostname, url.port, {"password": url.password})],
+            },
+        }
+    }
+else:
+    CHANNEL_LAYERS = {
+        "default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}
+    }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
